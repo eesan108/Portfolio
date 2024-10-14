@@ -1,0 +1,57 @@
+.catName {
+    font-size: 25px;
+    font-weight: 750;
+    color: rgb(255, 255, 255);
+    background-color: rgb(179, 58, 58);
+    padding: 10px;
+}
+
+.catCategories input {
+    width: 20px;     /* Increases width */
+    height: 25px;     /* Increases height */
+    font-size: 60px;  /* Larger text */
+    margin-bottom: -25px;
+}
+
+#allCompleteContainer {
+    text-align: center;
+}
+
+#allComplete {
+    visibility: hidden;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    font-size: larger;
+    text-align: center;
+    background-color: forestgreen;
+    display: inline-block; /* Change display to inline-block */
+    padding: 10px; /* Optional: Adds padding around the text */
+    color: white; /* Optional: Change text color for better contrast */
+}
+
+.title h1 {
+    font-size: 28px;
+    font-weight: 500;
+    letter-spacing: 0;
+    line-height: 1.5em;
+    padding-bottom: 15px;
+    position: relative;
+  }
+  .title h1:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 5px;
+    width: 55px;
+    background-color: #111;
+  }
+  .title h1:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 2px;
+    height: 1px;
+    width: 95%;
+    max-width: 255px;
+    background-color: #333;
+  }
