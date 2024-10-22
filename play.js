@@ -20,8 +20,112 @@ let mike = false;
 let willow = false;
 let theo = false;
 
+
+//Store the dynamic tasks for each cat
+let mikeTasks = [];
+let willowTasks = [];
+let theoTasks = [];
+
+
+
+// Edit task label function
+function editTaskLabel(taskId) {
+    const label = document.getElementById(`${taskId}Label`);
+
+    // Create input for editing and set its value to the current label's text
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = label.innerText;
+
+    // Replace the label with the input
+    label.replaceWith(input);
+
+    // Save on pressing Enter ket or unfocusing the input 
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            saveTaskLabel(input, taskId);
+        }
+    });
+    input.addEventListener('blur', ()=> saveTaskLabel(input, taskId));
+
+    input.focus(); // Focus on the input for immediate editing
+}
+
+// Save task label after editing
+function saveTaskLabel(input, taskId) {
+    const newLabel = document.createElement('span');
+    newLabel.id = `${taskId}label`;
+    newLabel.innerText = input.value; // Set the label to the new input value
+
+    // Replace the input with the updated label
+    input.replaceWith(newLabel);
+}
+
+function addTask(cat) {
+    const container = document.getElementById(`${cat}Tasks`);
+    const taskId = `${cat}Task${Math.random().toString(36).substr(2,9)}`; //Unique task
+
+    //Create new checkbox
+    const newCheckbox = document.createElement('input');
+    newCheckbox.type = 'checkbox';
+    newCheckbox.id = taskId;
+
+    //Create new editable text input for the label
+    const newLabel = document.createElement('span');
+    newLabel.id = `${taskId}Label`;
+    newLabel.innerText = `New Task for ${cat.charAt(0).toUpperCase() + cat.slice(1)}`;
+
+    const editButton = document.createElement('button');
+    editButton.innerText = "Edit";
+    editButton.onclick = () => editTaskLabel(taskId);
+
+    //Add new CB and label to the DOM
+    container.appendChild(newCheckbox);
+    container.appendChild(newLabel);
+    container.appendChild(editButton);
+    container.appendChild(document.createElement('br'));
+
+    //Add CB to relevant array
+    if(cat === 'mike'){
+        mikeTasks.push(newCheckbox);
+        newCheckbox.addEventListener('change', checkMike); //add Event Listener to new checkbox
+        checkMike(); 
+    } else if(cat === 'willow') {
+        willowTasks.push(newCheckbox);
+        newCheckbox.addEventListener('change', checkWillow);
+        checkWillow();
+    } else if(cat === 'theo') {
+        theoTasks.push(newCheckbox);
+        newCheckbox.addEventListener('change', checkTheo);
+        checkTheo();
+    }
+} 
+
+    //create
+
+
+function removeTask(cat) {
+    if (cat === 'mike' && mikeTasks.length > 0) {
+        const taskToRemove = mikeTasks.pop();
+        taskToRemove.nextElementSibling.remove(); //Remove the label (text input)
+        taskToRemove.remove(); //Remove the checkbox
+    } else if (cat === 'willow' && willowTasks.length > 0) {
+        const taskToRemove = willowTasks.pop();
+        taskToRemove.nextElementSibling.remove(); //Remove the label
+        taskToRemove.remove(); //Remove the checkbox
+    } else if (cat === 'theo' && theoTasks.length > 0) {
+        const taskToRemove = theoTasks.pop();
+        taskToRemove.nextElementSibling.remove(); //Remove the label
+        taskToRemove.remove(); //Remove the checkbox
+    } 
+}
+
+
 function checkMike(){
-    if (mikeBtn1.checked && mikeBtn2.checked && mikeBtn3.checked && mikeBtn4.checked) {
+    const baseChecks = mikeBtn1.checked && mikeBtn2.checked && mikeBtn3.checked && mikeBtn4.checked
+    const dynamicChecks = mikeTasks.every(task => task.checked);
+
+    if (baseChecks && dynamicChecks) {
         console.log("Mike checkboxes are checked!");
         mike = true;
         console.log(mike);
@@ -32,7 +136,10 @@ function checkMike(){
     colorChange(mike, mikeTitle);
 }
 function checkWillow(){
-    if (willowBtn1.checked && willowBtn2.checked && willowBtn3.checked && willowBtn4.checked) {
+    const baseChecks = willowBtn1.checked && willowBtn2.checked && willowBtn3.checked && willowBtn4.checked
+    const dynamicChecks = willowTasks.every(task => task.checked);
+
+    if (baseChecks && dynamicChecks) {
         console.log("Willow checkboxes are checked!");
         willow = true;
         console.log(willow);
@@ -43,7 +150,10 @@ function checkWillow(){
     colorChange(willow, willowTitle);
 }
 function checkTheo(){
-    if (theoBtn1.checked && theoBtn2.checked && theoBtn3.checked && theoBtn4.checked) {
+    const baseChecks = theoBtn1.checked && theoBtn2.checked && theoBtn3.checked && theoBtn4.checked
+    const dynamicChecks = theoTasks.every(task => task.checked);
+
+    if (baseChecks && dynamicChecks) {
         console.log("Theo checkboxes are checked!");
         theo = true;
         console.log(theo);

@@ -1,3 +1,16 @@
+html {
+  --s: 300px; /* control the size*/
+  --c1: #eeefe9;
+  --c2: #9fa2a8;
+  --c3: #cabbaa;
+  
+  background:
+    repeating-conic-gradient(from 30deg,#0000 0 120deg,var(--c3) 0 50%) 
+     calc(var(--s)/2) calc(var(--s)*tan(30deg)/2),
+    repeating-conic-gradient(from 30deg,var(--c1) 0 60deg,var(--c2) 0 120deg,var(--c3) 0 50%);
+  background-size: var(--s) calc(var(--s)*tan(30deg));
+}
+
 .catName {
     font-size: 25px;
     font-weight: 750;
@@ -6,7 +19,7 @@
     padding: 10px;
 }
 
-.catCategories input {
+.catCategories input[type="checkbox"] {
     width: 20px;     /* Increases width */
     height: 25px;     /* Increases height */
     font-size: 60px;  /* Larger text */
