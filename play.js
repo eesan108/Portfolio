@@ -1,7 +1,7 @@
-const mikeBtn1 = document.getElementById("bigMikeFed");
-const mikeBtn2 = document.getElementById("bigMikeBathroom");
-const mikeBtn3 = document.getElementById("bigMikePetted");
-const mikeBtn4 = document.getElementById("bigMikePlayedWith");
+const mikeBtn1 = document.getElementById("mikeFed");
+const mikeBtn2 = document.getElementById("mikeBathroom");
+const mikeBtn3 = document.getElementById("mikePetted");
+const mikeBtn4 = document.getElementById("mikePlayedWith");
 const willowBtn1 = document.getElementById("willowFed");
 const willowBtn2 = document.getElementById("willowBathroom");
 const willowBtn3 = document.getElementById("willowPetted");
@@ -26,101 +26,73 @@ let mikeTasks = [];
 let willowTasks = [];
 let theoTasks = [];
 
-
-
-// Edit task label function
-function editTaskLabel(taskId) {
-    const label = document.getElementById(`${taskId}Label`);
-
-    // Create input for editing and set its value to the current label's text
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.value = label.innerText;
-
-    // Replace the label with the input
-    label.replaceWith(input);
-
-    // Save on pressing Enter ket or unfocusing the input 
-    input.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-            saveTaskLabel(input, taskId);
-        }
-    });
-    input.addEventListener('blur', ()=> saveTaskLabel(input, taskId));
-
-    input.focus(); // Focus on the input for immediate editing
-}
-
-// Save task label after editing
-function saveTaskLabel(input, taskId) {
-    const newLabel = document.createElement('span');
-    newLabel.id = `${taskId}label`;
-    newLabel.innerText = input.value; // Set the label to the new input value
-
-    // Replace the input with the updated label
-    input.replaceWith(newLabel);
-}
-
+// function to add and remove tasks: vvv
 function addTask(cat) {
     const container = document.getElementById(`${cat}Tasks`);
-    const taskId = `${cat}Task${Math.random().toString(36).substr(2,9)}`; //Unique task
+    let initialId = `${cat}Task`;
 
-    //Create new checkbox
     const newCheckbox = document.createElement('input');
     newCheckbox.type = 'checkbox';
-    newCheckbox.id = taskId;
+    newCheckbox.id = "";
+    
 
-    //Create new editable text input for the label
     const newLabel = document.createElement('span');
-    newLabel.id = `${taskId}Label`;
-    newLabel.innerText = `New Task for ${cat.charAt(0).toUpperCase() + cat.slice(1)}`;
+    newLabel.class = "checkboxTitles"
+    newLabel.id = ""
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = 'New Task';
 
-    const editButton = document.createElement('button');
-    editButton.innerText = "Edit";
-    editButton.onclick = () => editTaskLabel(taskId);
-
-    //Add new CB and label to the DOM
+    //add to the DOM
     container.appendChild(newCheckbox);
     container.appendChild(newLabel);
-    container.appendChild(editButton);
     container.appendChild(document.createElement('br'));
 
-    //Add CB to relevant array
-    if(cat === 'mike'){
+    newLabel.appendChild(input);
+
+    function saveInput() {
+        const newText = input.value;
+        newLabel.innerHTML = newText;
+        newCheckbox.id = newText;
+    }
+
+    if (cat === 'mike') {
         mikeTasks.push(newCheckbox);
-        newCheckbox.addEventListener('change', checkMike); //add Event Listener to new checkbox
-        checkMike(); 
-    } else if(cat === 'willow') {
+        newCheckbox.addEventListener('change', checkMike);
+    } else if (cat === 'willow') {
         willowTasks.push(newCheckbox);
         newCheckbox.addEventListener('change', checkWillow);
-        checkWillow();
-    } else if(cat === 'theo') {
+    } else if (cat === 'theo') {
         theoTasks.push(newCheckbox);
         newCheckbox.addEventListener('change', checkTheo);
-        checkTheo();
     }
-} 
 
-    //create
+    input.addEventListener('keydown', function(e) {
+        if(e.key === 'Enter') {
+            saveInput();
+            console.log(mikeTasks);
+        }
+    })
 
+    input.addEventListener('blur', function(){
+        setTimeout(saveInput, 0); //Delay to ensure 'blur' event finishes first
+    });
+}
 
-function removeTask(cat) {
-    if (cat === 'mike' && mikeTasks.length > 0) {
-        const taskToRemove = mikeTasks.pop();
-        taskToRemove.nextElementSibling.remove(); //Remove the label (text input)
-        taskToRemove.remove(); //Remove the checkbox
-    } else if (cat === 'willow' && willowTasks.length > 0) {
-        const taskToRemove = willowTasks.pop();
-        taskToRemove.nextElementSibling.remove(); //Remove the label
-        taskToRemove.remove(); //Remove the checkbox
-    } else if (cat === 'theo' && theoTasks.length > 0) {
-        const taskToRemove = theoTasks.pop();
-        taskToRemove.nextElementSibling.remove(); //Remove the label
-        taskToRemove.remove(); //Remove the checkbox
-    } 
+function removeTask() {
+
+}
+// function to edit task names: vvv
+function editTask() {
+
 }
 
 
+
+
+
+
+//don't change VVVVVVVVVVVV
 function checkMike(){
     const baseChecks = mikeBtn1.checked && mikeBtn2.checked && mikeBtn3.checked && mikeBtn4.checked
     const dynamicChecks = mikeTasks.every(task => task.checked);
@@ -170,18 +142,15 @@ function checkAllCats(){
         allComplete.style.visibility = "hidden";
     }
 }
-//Mike
+
 mikeBtn1.addEventListener('change', checkMike);
 mikeBtn2.addEventListener('change', checkMike);
 mikeBtn3.addEventListener('change', checkMike);
 mikeBtn4.addEventListener('change', checkMike);
-
-//Willow
 willowBtn1.addEventListener('change', checkWillow);
 willowBtn2.addEventListener('change', checkWillow);
 willowBtn3.addEventListener('change', checkWillow);
 willowBtn4.addEventListener('change', checkWillow);
-//THEO
 theoBtn1.addEventListener('change', checkTheo);
 theoBtn2.addEventListener('change', checkTheo);
 theoBtn3.addEventListener('change', checkTheo);
@@ -195,3 +164,4 @@ function colorChange(cat, element){
         element.style.backgroundColor = "rgb(179, 58, 58)";
     }
 }
+
