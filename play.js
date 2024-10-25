@@ -91,7 +91,7 @@ function addTask(cat) {
 
 function removeTask(cat) {
 
-    const removeMike = document.getElementById("removeMike");
+    const removeBtn = document.getElementById(`"removeMike"`); //change these three to remove${cat}
     const removeWillow = document.getElementById("removeWillow");
     const removeTheo = document.getElementById("removeTheo"); //START HERE!!!!!!
 
@@ -99,23 +99,21 @@ function removeTask(cat) {
     const existingTitle = container.querySelector('#removeTitle');
     if(existingTitle){
         console.log("This already exists");
+        removeTitle.remove(); //IMMPLEMENT THIS!!!!! (to say done)
         return;
-    }
-
-    const removeTitle = document.createElement('p');
-    removeTitle.innerText = "Select items to remove";
-    removeTitle.id = "removeTitle";
-
-    const firstInput = container.querySelector('input');
-
-    if (firstInput) {
-        container.insertBefore(removeTitle, firstInput);
     } else {
-        container.appendChild(removeTitle);
+        const removeTitle = document.createElement('p');
+        removeTitle.innerText = "Select items to remove";
+        removeTitle.id = "removeTitle";
+    
+        const firstInput = container.querySelector('input');
+    
+        if (firstInput) {
+            container.insertBefore(removeTitle, firstInput);
+        } else {
+            container.appendChild(removeTitle);
+        }
     }
-
-
-
 }
 // function to edit task names: vvv
 function editTask() {
