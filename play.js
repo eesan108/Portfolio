@@ -10,7 +10,9 @@ const theoBtn1 = document.getElementById("theoFed");
 const theoBtn2 = document.getElementById("theoBathroom");
 const theoBtn3 = document.getElementById("theoPetted");
 const theoBtn4 = document.getElementById("theoPlayedWith");
-const allComplete = document.getElementById("allComplete")
+const allComplete = document.getElementById("allComplete");
+
+
 
 const mikeTitle = document.getElementById("mikeTitle");
 const willowTitle = document.getElementById("willowTitle");
@@ -34,6 +36,7 @@ function addTask(cat) {
     const newCheckbox = document.createElement('input');
     newCheckbox.type = 'checkbox';
     newCheckbox.id = "";
+    console.log(mikeTasks, willowTasks, theoTasks);
     
 
     const newLabel = document.createElement('span');
@@ -50,8 +53,13 @@ function addTask(cat) {
 
     newLabel.appendChild(input);
 
-    function saveInput() {
-        const newText = input.value;
+    function saveInput(cat) {
+        const newText = input.value.replace(/\s+/g, '');
+
+        if(newText === "input#NewTask" || "input"){
+            console.log('error');
+        }
+
         newLabel.innerHTML = newText;
         newCheckbox.id = newText;
     }
@@ -70,16 +78,43 @@ function addTask(cat) {
     input.addEventListener('keydown', function(e) {
         if(e.key === 'Enter') {
             saveInput();
-            console.log(mikeTasks);
+            console.log(mikeTasks, willowTasks, theoTasks);
+
         }
     })
 
     input.addEventListener('blur', function(){
         setTimeout(saveInput, 0); //Delay to ensure 'blur' event finishes first
+        console.log(mikeTasks, willowTasks, theoTasks);
     });
 }
 
-function removeTask() {
+function removeTask(cat) {
+
+    const removeMike = document.getElementById("removeMike");
+    const removeWillow = document.getElementById("removeWillow");
+    const removeTheo = document.getElementById("removeTheo"); //START HERE!!!!!!
+
+    const container = document.getElementById(`${cat}Tasks`);
+    const existingTitle = container.querySelector('#removeTitle');
+    if(existingTitle){
+        console.log("This already exists");
+        return;
+    }
+
+    const removeTitle = document.createElement('p');
+    removeTitle.innerText = "Select items to remove";
+    removeTitle.id = "removeTitle";
+
+    const firstInput = container.querySelector('input');
+
+    if (firstInput) {
+        container.insertBefore(removeTitle, firstInput);
+    } else {
+        container.appendChild(removeTitle);
+    }
+
+
 
 }
 // function to edit task names: vvv
@@ -164,4 +199,3 @@ function colorChange(cat, element){
         element.style.backgroundColor = "rgb(179, 58, 58)";
     }
 }
-
