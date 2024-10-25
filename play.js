@@ -91,20 +91,39 @@ function addTask(cat) {
 
 function removeTask(cat) {
 
-    const removeBtn = document.getElementById(`"removeMike"`); //change these three to remove${cat}
+    const removeMike = document.getElementById("removeMike"); //change these three to remove${cat}
     const removeWillow = document.getElementById("removeWillow");
     const removeTheo = document.getElementById("removeTheo"); //START HERE!!!!!!
 
     const container = document.getElementById(`${cat}Tasks`);
     const existingTitle = container.querySelector('#removeTitle');
+
     if(existingTitle){
-        console.log("This already exists");
-        removeTitle.remove(); //IMMPLEMENT THIS!!!!! (to say done)
+        removeTitle.remove();
+        
+        if(removeMike) {
+            removeMike.innerText = "Remove Task for Mike";
+        } else if(removeWillow) {
+            removeWillow.innerText = "Remove Task for Willow";
+        } else if(removeTheo) {
+            removeTheo.innerText = "Remove Task for Theo";
+        }
         return;
     } else {
         const removeTitle = document.createElement('p');
         removeTitle.innerText = "Select items to remove";
         removeTitle.id = "removeTitle";
+
+        if(removeMike) {
+            removeMike.innerText = "Done";
+        }
+        if(removeWillow) {
+            removeWillow.innerText = "Done";
+        }
+        if(removeTheo) {
+            removeTheo.innerText = "Done";
+        }
+        
     
         const firstInput = container.querySelector('input');
     
