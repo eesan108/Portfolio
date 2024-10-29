@@ -68,3 +68,7 @@ html {
     max-width: 255px;
     background-color: #333;
   }
+
+  .remove-highlight {
+    background-color: #ffcccc;
+  }

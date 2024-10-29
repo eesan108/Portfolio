@@ -31,17 +31,12 @@ let theoTasks = [];
 // function to add and remove tasks: vvv
 function addTask(cat) {
     const container = document.getElementById(`${cat}Tasks`);
-    let initialId = `${cat}Task`;
 
     const newCheckbox = document.createElement('input');
     newCheckbox.type = 'checkbox';
-    newCheckbox.id = "";
-    console.log(mikeTasks, willowTasks, theoTasks);
-    
 
     const newLabel = document.createElement('span');
-    newLabel.class = "checkboxTitles"
-    newLabel.id = ""
+    newLabel.classList.add("checkboxTitles");
     const input = document.createElement('input');
     input.type = 'text';
     input.value = 'New Task';
@@ -50,104 +45,112 @@ function addTask(cat) {
     container.appendChild(newCheckbox);
     container.appendChild(newLabel);
     container.appendChild(document.createElement('br'));
-
     newLabel.appendChild(input);
 
     function saveInput(cat) {
-        const newText = input.value.replace(/\s+/g, '');
-
-        if(newText === "input#NewTask" || "input"){
-            console.log('error');
-        }
-
-        newLabel.innerHTML = newText;
-        newCheckbox.id = newText;
-    }
-
-    if (cat === 'mike') {
-        mikeTasks.push(newCheckbox);
-        newCheckbox.addEventListener('change', checkMike);
-    } else if (cat === 'willow') {
-        willowTasks.push(newCheckbox);
-        newCheckbox.addEventListener('change', checkWillow);
-    } else if (cat === 'theo') {
-        theoTasks.push(newCheckbox);
-        newCheckbox.addEventListener('change', checkTheo);
-    }
+        newLabel.innerHTML = input.value;
+        newCheckbox.id = input.value.replace(/\s+/g, '');
+    };
 
     input.addEventListener('keydown', function(e) {
-        if(e.key === 'Enter') {
-            saveInput();
-            console.log(mikeTasks, willowTasks, theoTasks);
-
-        }
-    })
-
+        if (e.key === 'Enter') saveInput();
+        //console.log(mikeTasks);
+    });
     input.addEventListener('blur', function(){
         setTimeout(saveInput, 0); //Delay to ensure 'blur' event finishes first
         console.log(mikeTasks, willowTasks, theoTasks);
     });
+
+    if (cat === 'mike') {
+        mikeTasks.push({ checkbox: newCheckbox, label: newLabel });
+        newCheckbox.addEventListener('change', checkMike);
+        checkMike();
+    } else if (cat === 'willow') {
+        willowTasks.push({ checkbox: newCheckbox, label: newLabel });
+        newCheckbox.addEventListener('change', checkWillow);
+        checkWillow();
+    } else if (cat === 'theo') {
+        theoTasks.push({ checkbox: newCheckbox, label: newLabel });
+        newCheckbox.addEventListener('change', checkTheo);
+        checkTheo();
+    }
 }
 
-function removeTask(cat) {
-
-    const removeMike = document.getElementById("removeMike"); //change these three to remove${cat}
-    const removeWillow = document.getElementById("removeWillow");
-    const removeTheo = document.getElementById("removeTheo"); //START HERE!!!!!!
-
+function removeTask(cat, button) {
     const container = document.getElementById(`${cat}Tasks`);
     const existingTitle = container.querySelector('#removeTitle');
+    const tasksArray = cat === 'mike' ? mikeTasks : cat === 'willow' ? willowTasks : theoTasks;
+
 
     if(existingTitle){
-        removeTitle.remove();
-        
-        if(removeMike) {
-            removeMike.innerText = "Remove Task for Mike";
-        } else if(removeWillow) {
-            removeWillow.innerText = "Remove Task for Willow";
-        } else if(removeTheo) {
-            removeTheo.innerText = "Remove Task for Theo";
-        }
-        return;
+        // In "Done" mode: remove marked tasks
+        tasksArray.forEach(task => {
+            const removeButton = task.label.nextElementSibling;
+            if(removeButton && removeButton.classList.contains('remove-btn')) {
+                removeButton.remove(); //Remove button from DOM
+            }
+        });
+        existingTitle.remove();
+       button.innerText =  `Remove Task for ${cat}`;
     } else {
+        // Enter "Remove mode"
         const removeTitle = document.createElement('p');
         removeTitle.innerText = "Select items to remove";
         removeTitle.id = "removeTitle";
+        button.innerText = "Done";
 
-        if(removeMike) {
-            removeMike.innerText = "Done";
-        }
-        if(removeWillow) {
-            removeWillow.innerText = "Done";
-        }
-        if(removeTheo) {
-            removeTheo.innerText = "Done";
-        }
-        
-    
         const firstInput = container.querySelector('input');
-    
         if (firstInput) {
             container.insertBefore(removeTitle, firstInput);
         } else {
             container.appendChild(removeTitle);
         }
+
+        tasksArray.forEach((task, index) => {
+            const removeButton = document.createElement('button');
+            removeButton.innerText = 'Remove';
+            removeButton.classList.add('remove-btn');
+            removeButton.style.marginLeft = '10px';
+
+            removeButton.addEventListener('click', ()=> {
+                task.checkbox.remove();
+                task.label.remove();
+                const brElement = removeButton.nextElementSibling;
+                if (brElement && brElement.tagName === 'BR') {
+                    brElement.remove();
+                }
+                removeButton.remove();
+                tasksArray.splice(index, 1);
+
+                if(cat === 'mike'){
+                    checkMike();
+                } else if (cat === 'willow') {
+                    checkWillow();
+                } else if (cat === 'theo') {
+                    checkTheo();
+                }
+            });
+
+            task.label.insertAdjacentElement('afterend', removeButton);
+        });
     }
+
+    tasksArray.length = 0;
+
+    const remainingTasks = container.querySelectorAll('input[type="checkbox"]');
+    remainingTasks.forEach(checkbox => {
+        tasksArray.push({ checkbox, label: checkbox.nextElementSibling });
+    });
+    console.log(mikeTasks);
 }
 // function to edit task names: vvv
 function editTask() {
 
 }
 
-
-
-
-
-
-//don't change VVVVVVVVVVVV
 function checkMike(){
     const baseChecks = mikeBtn1.checked && mikeBtn2.checked && mikeBtn3.checked && mikeBtn4.checked
-    const dynamicChecks = mikeTasks.every(task => task.checked);
+    const dynamicChecks = mikeTasks.every(task => task.checkbox.checked);
 
     if (baseChecks && dynamicChecks) {
         console.log("Mike checkboxes are checked!");
@@ -161,7 +164,7 @@ function checkMike(){
 }
 function checkWillow(){
     const baseChecks = willowBtn1.checked && willowBtn2.checked && willowBtn3.checked && willowBtn4.checked
-    const dynamicChecks = willowTasks.every(task => task.checked);
+    const dynamicChecks = willowTasks.every(task => task.checkbox.checked);
 
     if (baseChecks && dynamicChecks) {
         console.log("Willow checkboxes are checked!");
@@ -175,7 +178,7 @@ function checkWillow(){
 }
 function checkTheo(){
     const baseChecks = theoBtn1.checked && theoBtn2.checked && theoBtn3.checked && theoBtn4.checked
-    const dynamicChecks = theoTasks.every(task => task.checked);
+    const dynamicChecks = theoTasks.every(task => task.checkbox.checked);
 
     if (baseChecks && dynamicChecks) {
         console.log("Theo checkboxes are checked!");
